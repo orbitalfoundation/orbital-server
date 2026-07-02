@@ -1,0 +1,46 @@
+{
+  "name": "@orbitalfoundation/server",
+  "version": "0.1.0",
+  "description": "A thin transport shim over an orbital filespace: socket.io gateway (allowlist, not a pipe) + static SPA serving. The security is in the core; this only filters shapes and moves bytes.",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "orbital-server": "bin/orbital-server.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node --preserve-symlinks bin/orbital-server.js",
+    "test": "node --preserve-symlinks --test"
+  },
+  "keywords": [
+    "orbital",
+    "filespace",
+    "gateway",
+    "socket.io",
+    "collaboration"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orbitalfoundation/orbital-server.git"
+  },
+  "dependencies": {
+    "@fastify/static": "^8.0.0",
+    "@orbitalfoundation/bus": "file:../orbital-bus/packages/bus",
+    "@orbitalfoundation/filespace": "file:../orbital-filespace",
+    "@orbitalfoundation/streams": "file:../orbital-streams",
+    "@orbitalfoundation/utils": "file:../orbital-bus/packages/utils",
+    "fastify": "^5.0.0",
+    "socket.io": "^4.8.0"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.0"
+  }
+}
