@@ -35,10 +35,10 @@
     "@fastify/static": "^8.0.0",
     "@orbitalfoundation/bus": "file:../orbital-bus/packages/bus",
     "@orbitalfoundation/filespace": "file:../orbital-filespace",
+    "@orbitalfoundation/store": "file:../orbital-store",
     "@orbitalfoundation/streams": "file:../orbital-streams",
     "@orbitalfoundation/utils": "file:../orbital-bus/packages/utils",
     "fastify": "^5.0.0",
-    "mongodb": "^6.21.0",
     "socket.io": "^4.8.0"
   },
   "devDependencies": {

@@ -35,12 +35,11 @@ matter where you launch from. Flags override the file.
 
 Store kinds: **`file`** (zero-dep JSON/JSONL, the default), **`mongo`**
 (`{ "kind": "mongo", "url": "mongodb://…", "db": "orbital" }` — url falls back
-to `MONGO_URL`), **`memory`** (volatile). The mongo adapters live here in
-[`src/store/mongo.js`](src/store/mongo.js) — one client serving both store
-contracts (filespace nodes + streams messages) — because a database is a
-deployment detail the composition root recruits, not a dependency of the
-cores. Contract-tested against a real mongod (`test/mongo.test.js`, skips
-when none is reachable).
+to `MONGO_URL`), **`memory`** (volatile). The mongo adapters live in
+[`@orbitalfoundation/store`](../orbital-store) — the toolbox of contract
+implementations — and are lazy-imported only when the config asks for them:
+the server selects tools, it doesn't own them, and anything (CLI, sim, test)
+can compose the same adapters with no server in sight.
 
 From the instance root: `npm start`. Flags: `--config`, `--port`, `--host`,
 `--public`, `--web`, `--db`, `--messages`, `--verbose`.

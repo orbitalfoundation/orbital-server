@@ -51,7 +51,8 @@ if (flags.db) {
   opts.dbPath = resolve(flags.db);
   opts.messagesPath = flags.messages ? resolve(flags.messages) : join(dirname(resolve(flags.db)), 'messages.jsonl');
 } else if (store.kind === 'mongo') {
-  const { makeMongoStores } = await import('../src/store/mongo.js');
+  // the toolbox loads only when configured — the server stays a shallow shim
+  const { makeMongoStores } = await import('@orbitalfoundation/store');
   const url = store.url ?? process.env.MONGO_URL ?? 'mongodb://127.0.0.1:27017';
   const mongo = await makeMongoStores({ url, dbName: store.db ?? 'orbital' });
   opts.store = mongo.nodes;
