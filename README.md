@@ -17,18 +17,33 @@ What it adds:
 
 ## Run
 
-The server ships no content — a `public/` seed tree belongs to the *instance*
-(deployment), not to this package. For the orbital instance that's
-[`orbital/public/`](../public), booted via `../run-jam.sh`; or point the flags
-anywhere:
+The server ships no content and no state — seeds (`public/`), state
+(`.filespace/` or a database) and configuration belong to the *instance*. One
+`orbital.config.json` at the instance root is the single source of truth; the
+server auto-discovers it in the cwd (or `--config <file>`), and relative paths
+resolve against the config file's directory, so state stays canonical no
+matter where you launch from. Flags override the file.
 
-```sh
-npm install
-npm start -- --port 8080 --public ../public --web ../orbital-jam/dist
+```json
+{
+  "port": 8080,
+  "public": "./public",
+  "web": "./orbital-jam/dist",
+  "store": { "kind": "file", "path": "./.filespace" }
+}
 ```
 
-Flags: `--port`, `--host`, `--public <manifest tree>` (lazy-hydrated),
-`--web <dist>` (compiled SPA), `--db <nodes.json>`, `--verbose`.
+Store kinds: **`file`** (zero-dep JSON/JSONL, the default), **`mongo`**
+(`{ "kind": "mongo", "url": "mongodb://…", "db": "orbital" }` — url falls back
+to `MONGO_URL`), **`memory`** (volatile). The mongo adapters live here in
+[`src/store/mongo.js`](src/store/mongo.js) — one client serving both store
+contracts (filespace nodes + streams messages) — because a database is a
+deployment detail the composition root recruits, not a dependency of the
+cores. Contract-tested against a real mongod (`test/mongo.test.js`, skips
+when none is reachable).
+
+From the instance root: `npm start`. Flags: `--config`, `--port`, `--host`,
+`--public`, `--web`, `--db`, `--messages`, `--verbose`.
 
 ## Test
 

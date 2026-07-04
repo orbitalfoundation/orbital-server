@@ -202,6 +202,8 @@ export async function createServer({
     async close() {
       io.close();
       await app.close();
+      await msgStore.close?.();
+      await fsStore.close?.();
     },
   };
 }
