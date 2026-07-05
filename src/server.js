@@ -56,6 +56,41 @@ export async function createServer({
   const app = Fastify({ logger });
   app.get('/api/health', async () => ({ ok: true, filespace: true, manifestRoot: Boolean(manifestRoot) }));
 
+  // depiction suggestions — a thin proxy over Unsplash search, so the access
+  // key stays server-side (env: UNSPLASH_ACCESS_KEY; a .env beside the config
+  // works). Degrades honestly when unconfigured. Cached per query.
+  const unsplashKey = process.env.UNSPLASH_ACCESS_KEY ?? process.env.UNSPLASH_ACCESS ?? null;
+  const depictionCache = new Map();
+  app.get('/api/depiction', async (req) => {
+    const q = String(req.query?.q ?? '').trim();
+    if (!unsplashKey) return { ok: false, error: 'no UNSPLASH_ACCESS_KEY configured' };
+    if (!q) return { ok: false, error: 'q required' };
+    const key = q.toLowerCase();
+    if (depictionCache.has(key)) return depictionCache.get(key);
+    try {
+      const res = await fetch(
+        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(q)}&per_page=6&orientation=landscape`,
+        { headers: { Authorization: `Client-ID ${unsplashKey}` } },
+      );
+      if (!res.ok) return { ok: false, error: `unsplash: ${res.status}` };
+      const data = await res.json();
+      const out = {
+        ok: true,
+        photos: (data.results ?? []).map((p) => ({
+          url: p.urls?.regular ?? null,
+          thumb: p.urls?.thumb ?? null,
+          credit: p.user?.name ?? null,
+          link: p.links?.html ?? null,
+        })).filter((p) => p.url),
+      };
+      depictionCache.set(key, out);
+      if (depictionCache.size > 200) depictionCache.delete(depictionCache.keys().next().value);
+      return out;
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  });
+
   if (webDist && existsSync(webDist)) {
     app.register(fastifyStatic, { root: resolve(webDist) });
     // slash-routed SPA: /anselm/project is a client route, not a file

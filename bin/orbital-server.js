@@ -37,6 +37,16 @@ if (configPath) {
 }
 const rel = (p) => (p ? resolve(base, p) : null);
 
+// a .env beside the config carries deployment secrets (UNSPLASH_ACCESS_KEY,
+// MONGO_URL with credentials, …) — the config file itself is committable
+const envPath = resolve(base, '.env');
+if (existsSync(envPath)) {
+  for (const line of readFileSync(envPath, 'utf8').split('\n')) {
+    const m = line.match(/^\s*([A-Za-z0-9_]+)\s*=\s*(.*?)\s*$/);
+    if (m && !(m[1] in process.env)) process.env[m[1]] = m[2];
+  }
+}
+
 const opts = {
   port: Number(flags.port ?? cfg.port ?? 8080),
   host: flags.host ?? cfg.host ?? '0.0.0.0',
