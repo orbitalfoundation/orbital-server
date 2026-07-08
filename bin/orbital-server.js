@@ -7,7 +7,7 @@
 // so state (.filespace/), seeds (public/) and the web dist stay canonical no
 // matter where the process is launched from — no more per-cwd databases.
 //
-//   { "port": 8080, "public": "./public", "web": "./orbital-jam/dist",
+//   { "port": 8080, "public": "./public", "web": "./dist",
 //     "store": { "kind": "file", "path": "./.filespace" } }
 //   store kinds: "file" (default) | "mongo" ({ url, db }) | "memory"
 //

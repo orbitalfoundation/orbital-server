@@ -28,7 +28,7 @@ matter where you launch from. Flags override the file.
 {
   "port": 8080,
   "public": "./public",
-  "web": "./orbital-jam/dist",
+  "web": "./dist",
   "store": { "kind": "file", "path": "./.filespace" }
 }
 ```
