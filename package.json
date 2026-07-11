@@ -33,11 +33,11 @@
   },
   "dependencies": {
     "@fastify/static": "^8.0.0",
-    "@orbitalfoundation/bus": "file:../orbital-bus/packages/bus",
-    "@orbitalfoundation/filespace": "file:../orbital-filespace",
-    "@orbitalfoundation/store": "file:../orbital-store",
-    "@orbitalfoundation/streams": "file:../orbital-streams",
-    "@orbitalfoundation/utils": "file:../orbital-bus/packages/utils",
+    "@orbitalfoundation/bus": "^2.0.1",
+    "@orbitalfoundation/filespace": "^0.1.0",
+    "@orbitalfoundation/store": "^0.1.0",
+    "@orbitalfoundation/streams": "^0.1.0",
+    "@orbitalfoundation/utils": "^2.0.0",
     "fastify": "^5.0.0",
     "socket.io": "^4.8.0"
   },
